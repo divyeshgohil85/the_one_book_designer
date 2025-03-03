@@ -50,8 +50,7 @@ const MyApp({super.key});
     
 }
 ```
-
-https://github.com/user-attachments/assets/29347558-c0c3-4070-9979-bc2a63d530b1
+![book_page_animation](https://github.com/user-attachments/assets/c39228b0-3edf-4c1a-9fd9-1181f739c681)
 
 
 - Powered by The One Technologies
