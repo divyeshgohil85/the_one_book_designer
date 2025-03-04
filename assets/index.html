@@ -257,28 +257,83 @@ input:checked + .pages div {
 
       console.log(`Total pages added: ${checkboxes.length}`);
 
-      // Apply flipping behavior
-      checkboxes.forEach((checkbox, index) => {
+    // Apply flipping behavior with sequential control
+
+        checkboxes.forEach((checkbox, index) => {
+
           checkbox.addEventListener("change", function () {
-              book.classList.add("new");
 
-              if (index === checkboxes.length - 1 && checkbox.checked) {
-                  setTimeout(() => {
-                      book.classList.remove("new");
-                      book.classList.add("last-page");
-                  }, 1000);
-              } else {
-                  book.classList.remove("last-page");
+            if (this.checked) {
+
+              // Only allow opening the page if the previous one is already opened
+
+              if (index > 0 && !checkboxes[index - 1].checked) {
+
+                this.checked = false;
+
+                return;
+
               }
 
-              if (index === 0 && !checkbox.checked) {
-                  setTimeout(() => {
-                      book.classList.remove("new");
-                  }, 1000);
+            } else {
+
+              // Only allow closing the page if the next one is already closed
+
+              if (
+
+                index < checkboxes.length - 1 &&
+
+                checkboxes[index + 1].checked
+
+              ) {
+
+                this.checked = true;
+
+                return;
+
               }
+
+            }
+
+
+
+            book.classList.add("new");
+
+
+
+            if (index === checkboxes.length - 1 && checkbox.checked) {
+
+              setTimeout(() => {
+
+                book.classList.remove("new");
+
+                book.classList.add("last-page");
+
+              }, 1000);
+
+            } else {
+
+              book.classList.remove("last-page");
+
+            }
+
+
+
+            if (index === 0 && !checkbox.checked) {
+
+              setTimeout(() => {
+
+                book.classList.remove("new");
+
+              }, 1000);
+
+            }
+
           });
-      });
-  }
+
+        });
+
+      }
   window.onload = function () {
 
         addPages();
@@ -286,7 +341,6 @@ input:checked + .pages div {
       };
 
 </script>
-
 
 </body>
 
