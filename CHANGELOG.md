@@ -23,3 +23,7 @@
 ## 1.0.5
 
 * We have added a loader to the WebView to enhance the user experience by displaying a loading indicator while content is being loaded.
+
+## 1.0.6
+
+* Bug fixes and improvements
