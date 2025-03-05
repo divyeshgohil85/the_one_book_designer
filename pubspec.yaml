@@ -1,6 +1,6 @@
 name: theone_book_designer
 description: "The One Book Designer is a Flutter package that provides a customizable widget for displaying book page animations."
-version: 1.0.3
+version: 1.0.4
 homepage: https://github.com/divyeshgohil85/the_one_book_designer
 
 environment:

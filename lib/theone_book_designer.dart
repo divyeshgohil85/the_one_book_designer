@@ -46,7 +46,8 @@ class TheOneBookDesigner extends StatelessWidget {
           // Create a string representation of the image URLs
           final String imageArray = imageUrls.map((url) => "'$url'").join(',');
           await webView?.evaluateJavascript(
-            source: "console.log('Adding pages:', [$imageArray]); addPages([$imageArray]);",
+            source:
+                "console.log('Adding pages:', [$imageArray]); addPages([$imageArray]);",
           );
         },
         onReceivedError: (controller, request, error) {

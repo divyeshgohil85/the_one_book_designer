@@ -15,3 +15,7 @@
 ## 1.0.3
 
 * Bug fixes and code improvements made.
+
+## 1.0.4
+
+* Code formated and improved.
