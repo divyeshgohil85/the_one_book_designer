@@ -19,3 +19,7 @@
 ## 1.0.4
 
 * Code formated and improved.
+
+## 1.0.5
+
+* We have added a loader to the WebView to enhance the user experience by displaying a loading indicator while content is being loaded.

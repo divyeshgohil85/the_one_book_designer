@@ -26,33 +26,39 @@ class TheOneBookDesigner extends StatelessWidget {
     final key = UniqueKey();
 
     try {
-      return InAppWebView(
-        initialFile: 'packages/theone_book_designer/assets/index.html',
-        initialUserScripts: UnmodifiableListView<UserScript>([]),
-        key: key,
-        initialSettings: InAppWebViewSettings(
-          allowsInlineMediaPlayback: true,
-          transparentBackground: true,
-          disableVerticalScroll: true,
-          disableHorizontalScroll: true,
-          supportZoom: false,
-          useShouldOverrideUrlLoading: true,
-          allowFileAccessFromFileURLs: true,
+      return Center(
+        child: Container(
+          height: 250,
+          width: 500,
+          child: InAppWebView(
+            initialFile: 'packages/theone_book_designer/assets/index.html',
+            initialUserScripts: UnmodifiableListView<UserScript>([]),
+            key: key,
+            initialSettings: InAppWebViewSettings(
+              allowsInlineMediaPlayback: true,
+              transparentBackground: true,
+              disableVerticalScroll: true,
+              disableHorizontalScroll: true,
+              supportZoom: false,
+              useShouldOverrideUrlLoading: true,
+              allowFileAccessFromFileURLs: true,
+            ),
+            onWebViewCreated: (InAppWebViewController inAppController) {
+              webView = inAppController;
+            },
+            onLoadStop: (controller, url) async {
+              // Create a string representation of the image URLs
+              final String imageArray = imageUrls.map((url) => "'$url'").join(',');
+              await webView?.evaluateJavascript(
+                source:
+                    "console.log('Adding pages:', [$imageArray]); addPages([$imageArray]);",
+              );
+            },
+            onReceivedError: (controller, request, error) {
+              debugPrint('Webview Error: $error');
+            },
+          ),
         ),
-        onWebViewCreated: (InAppWebViewController inAppController) {
-          webView = inAppController;
-        },
-        onLoadStop: (controller, url) async {
-          // Create a string representation of the image URLs
-          final String imageArray = imageUrls.map((url) => "'$url'").join(',');
-          await webView?.evaluateJavascript(
-            source:
-                "console.log('Adding pages:', [$imageArray]); addPages([$imageArray]);",
-          );
-        },
-        onReceivedError: (controller, request, error) {
-          debugPrint('Webview Error: $error');
-        },
       );
     } catch (e, st) {
       debugPrint('Webview Error: $e, $st');

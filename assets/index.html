@@ -199,148 +199,177 @@ input:checked + .pages div {
                 transform: translateX(100%) !important;
             }
         }
+        /* Spinner CSS */
+/* Spinner CSS */
+.spinner {
+    width: 35px;
+    height: 35px;
+   border: 3px solid #d3d3d3; /* LightGray */
+    border-top: 3px solid #007bff; /* Blue color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Keyframes for spinning animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
     </style>
 </head>
 
 <body>
+<!--<div id="loader" style="-->
+<!--    position: fixed;-->
+<!--    top: 50%;-->
+<!--    left: 50%;-->
+<!--    transform: translate(-50%, -50%);-->
+<!--    font-size: 20px;-->
+<!--    background: white;-->
+<!--    padding: 20px;-->
+<!--    border-radius: 10px;-->
+<!--    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);-->
+<!--    z-index: 999;-->
+<!--">-->
+<!--    Loading...-->
+<!--</div>-->
+<!-- Circular Loader -->
+<div id="loader" style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+">
+    <div class="spinner"></div>
+</div>
 
-<div class="book">
+<!-- Book Container (Initially Hidden) -->
+<div class="book" style="display: none;">
     <div class="pages" id="pagesContainer"></div>
 </div>
 
 <script>
     function addPages(imageUrls) {
-      const pagesContainer = document.getElementById("pagesContainer");
-      pagesContainer.innerHTML = ""; // Clear previous content
-      const book = document.querySelector('.book');
+        const pagesContainer = document.getElementById("pagesContainer");
+        const book = document.querySelector('.book');
+        const loader = document.getElementById("loader");
+        pagesContainer.innerHTML = ""; // Clear previous content
 
-      console.log("Adding pages dynamically...");
+        console.log("Adding pages dynamically...");
 
-      let checkboxes = [];
+        let checkboxes = [];
+        let imagesLoaded = 0;
 
-      imageUrls.forEach((imageUrl, index) => {
-          const pageId = `page${index + 1}`;
+        const startTime = Date.now(); // Track time for a minimum delay
 
-          console.log(`Creating page ${index + 1} with image: ${imageUrl}`);
+        imageUrls.forEach((imageUrl, index) => {
+            const pageId = `page${index + 1}`;
+            console.log(`Creating page ${index + 1} with image: ${imageUrl}`);
 
-          // Create checkbox
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = pageId;
-          checkbox.name = pageId;
+            // Create checkbox
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = pageId;
+            checkbox.name = pageId;
 
-          // Create page div
-          const pageDiv = document.createElement("div");
-          pageDiv.classList.add(`page${index + 1}`); // Now it matches CSS
+            // Create page div
+            const pageDiv = document.createElement("div");
+            pageDiv.classList.add(`page${index + 1}`);
 
+            // Create image element
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            img.classList.add("img-fluid");
+            img.alt = `Page ${index + 1}`;
 
-          // Create image element
-          const img = document.createElement("img");
-          img.src = imageUrl;
-          img.classList.add("img-fluid");
-          img.alt = `Page ${index + 1}`;
+            // Image load event
+            img.onload = function () {
+                imagesLoaded++;
+                console.log(`Image ${index + 1} loaded`);
 
-          // Create label for checkbox
-          const label = document.createElement("label");
-          label.htmlFor = pageId;
+                // If all images are loaded
+                if (imagesLoaded === imageUrls.length) {
+                    const elapsedTime = Date.now() - startTime;
+                    const remainingTime = Math.max(1000 - elapsedTime, 0); // Ensure at least 1 second
 
-          // Append elements to page div
-          pageDiv.appendChild(img);
-          pageDiv.appendChild(label);
+                    setTimeout(() => {
+                        loader.style.display = "none"; // Hide loader
+                        book.style.display = "block"; // Show book
+                    }, remainingTime);
+                }
+            };
 
-          // Append checkbox BEFORE .pages
-          book.insertBefore(checkbox, pagesContainer);
-          pagesContainer.appendChild(pageDiv);
+            // Create label for checkbox
+            const label = document.createElement("label");
+            label.htmlFor = pageId;
 
-          checkboxes.push(checkbox);
-      });
+            // Append elements to page div
+            pageDiv.appendChild(img);
+            pageDiv.appendChild(label);
 
-      console.log(`Total pages added: ${checkboxes.length}`);
+            // Append checkbox BEFORE .pages
+            book.insertBefore(checkbox, pagesContainer);
+            pagesContainer.appendChild(pageDiv);
 
-    // Apply flipping behavior with sequential control
-
-        checkboxes.forEach((checkbox, index) => {
-
-          checkbox.addEventListener("change", function () {
-
-            if (this.checked) {
-
-              // Only allow opening the page if the previous one is already opened
-
-              if (index > 0 && !checkboxes[index - 1].checked) {
-
-                this.checked = false;
-
-                return;
-
-              }
-
-            } else {
-
-              // Only allow closing the page if the next one is already closed
-
-              if (
-
-                index < checkboxes.length - 1 &&
-
-                checkboxes[index + 1].checked
-
-              ) {
-
-                this.checked = true;
-
-                return;
-
-              }
-
-            }
-
-
-
-            book.classList.add("new");
-
-
-
-            if (index === checkboxes.length - 1 && checkbox.checked) {
-
-              setTimeout(() => {
-
-                book.classList.remove("new");
-
-                book.classList.add("last-page");
-
-              }, 1000);
-
-            } else {
-
-              book.classList.remove("last-page");
-
-            }
-
-
-
-            if (index === 0 && !checkbox.checked) {
-
-              setTimeout(() => {
-
-                book.classList.remove("new");
-
-              }, 1000);
-
-            }
-
-          });
-
+            checkboxes.push(checkbox);
         });
 
-      }
-  window.onload = function () {
+        console.log(`Total pages added: ${checkboxes.length}`);
+
+        // Apply flipping behavior with sequential control
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener("change", function () {
+                if (this.checked) {
+                    if (index > 0 && !checkboxes[index - 1].checked) {
+                        this.checked = false;
+                        return;
+                    }
+                } else {
+                    if (index < checkboxes.length - 1 && checkboxes[index + 1].checked) {
+                        this.checked = true;
+                        return;
+                    }
+                }
+
+                book.classList.add("new");
+
+                if (index === checkboxes.length - 1 && checkbox.checked) {
+                    setTimeout(() => {
+                        book.classList.remove("new");
+                        book.classList.add("last-page");
+                    }, 1000);
+                } else {
+                    book.classList.remove("last-page");
+                }
+
+                if (index === 0 && !checkbox.checked) {
+                    setTimeout(() => {
+                        book.classList.remove("new");
+                    }, 1000);
+                }
+            });
+        });
+    }
+
+<!--    window.onload = function () {-->
+<!--        const imageUrls = [-->
+<!--            "https://via.placeholder.com/260x180?text=Page+1",-->
+<!--            "https://via.placeholder.com/260x180?text=Page+2",-->
+<!--            "https://via.placeholder.com/260x180?text=Page+3",-->
+<!--            "https://via.placeholder.com/260x180?text=Page+4",-->
+<!--            "https://via.placeholder.com/260x180?text=Page+5"-->
+<!--        ];-->
+
+<!--        addPages(imageUrls);-->
+<!--    };-->
+    window.onload = function () {
 
         addPages();
 
       };
-
 </script>
+
 
 </body>
 
