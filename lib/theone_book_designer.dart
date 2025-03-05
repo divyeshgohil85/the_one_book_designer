@@ -27,7 +27,7 @@ class TheOneBookDesigner extends StatelessWidget {
 
     try {
       return Center(
-        child: Container(
+        child: SizedBox(
           height: 250,
           width: 500,
           child: InAppWebView(
@@ -48,7 +48,8 @@ class TheOneBookDesigner extends StatelessWidget {
             },
             onLoadStop: (controller, url) async {
               // Create a string representation of the image URLs
-              final String imageArray = imageUrls.map((url) => "'$url'").join(',');
+              final String imageArray =
+                  imageUrls.map((url) => "'$url'").join(',');
               await webView?.evaluateJavascript(
                 source:
                     "console.log('Adding pages:', [$imageArray]); addPages([$imageArray]);",
