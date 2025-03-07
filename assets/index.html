@@ -350,24 +350,51 @@ input:checked + .pages div {
                 }
             });
         });
+
+        // Swipe gesture functionality
+        let startX = 0;
+        let endX = 0;
+
+        book.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        book.addEventListener("touchend", (e) => {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (startX - endX > threshold) {
+                nextPage();
+            } else if (endX - startX > threshold) {
+                prevPage();
+            }
+        }
+
+        function nextPage() {
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (!checkboxes[i].checked) {
+                    checkboxes[i].click(); // Simulate click instead of setting checked directly
+                    break;
+                }
+            }
+        }
+
+        function prevPage() {
+            for (let i = checkboxes.length - 1; i >= 0; i--) {
+                if (checkboxes[i].checked) {
+                    checkboxes[i].click(); // Simulate click instead of setting checked directly
+                    break;
+                }
+            }
+        }
     }
 
-<!--    window.onload = function () {-->
-<!--        const imageUrls = [-->
-<!--            "https://via.placeholder.com/260x180?text=Page+1",-->
-<!--            "https://via.placeholder.com/260x180?text=Page+2",-->
-<!--            "https://via.placeholder.com/260x180?text=Page+3",-->
-<!--            "https://via.placeholder.com/260x180?text=Page+4",-->
-<!--            "https://via.placeholder.com/260x180?text=Page+5"-->
-<!--        ];-->
-
-<!--        addPages(imageUrls);-->
-<!--    };-->
     window.onload = function () {
-
         addPages();
-
-      };
+    };
 </script>
 
 

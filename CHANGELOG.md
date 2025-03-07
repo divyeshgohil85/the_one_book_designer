@@ -27,3 +27,11 @@
 ## 1.0.6
 
 * Bug fixes and improvements
+
+## 1.0.7
+
+* Enhanced User Experience with Swipe Gesture Functionality
+
+## 1.0.8
+
+* Bug fixes and improvements
