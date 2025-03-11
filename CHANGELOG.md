@@ -35,3 +35,7 @@
 ## 1.0.8
 
 * Bug fixes and improvements
+
+## 1.0.9
+
+* Minor bug fixes

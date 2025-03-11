@@ -334,19 +334,19 @@ input:checked + .pages div {
 
                 book.classList.add("new");
 
-                if (index === checkboxes.length - 1 && checkbox.checked) {
-                    setTimeout(() => {
-                        book.classList.remove("new");
-                        book.classList.add("last-page");
-                    }, 1000);
-                } else {
-                    book.classList.remove("last-page");
-                }
+            if (index === checkboxes.length - 1 && checkbox.checked) {
+
+             book.classList.remove("new"); // Remove 'new' immediately
+             book.classList.add("last-page");
+             } else {
+                     book.classList.remove("last-page");
+                 }
+            if (index === checkboxes.length - 1 && !checkbox.checked) {
+            book.classList.remove("last-page");
+              }
 
                 if (index === 0 && !checkbox.checked) {
-                    setTimeout(() => {
-                        book.classList.remove("new");
-                    }, 1000);
+                   book.classList.remove("new");
                 }
             });
         });
